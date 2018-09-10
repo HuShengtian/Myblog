@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="dao.CommentMapper">
+  <resultMap id="BaseResultMap" type="pojo.Comment">
+    <id column="id" jdbcType="INTEGER" property="id" />
+    <result column="article_id" jdbcType="INTEGER" property="articleId" />
+    <result column="nickname" jdbcType="VARCHAR" property="nickname" />
+    <result column="time" jdbcType="TIMESTAMP" property="time" />
+    <result column="star" jdbcType="INTEGER" property="star" />
+    <result column="diss" jdbcType="INTEGER" property="diss" />
+    <result column="content" jdbcType="LONGVARCHAR" property="content" />
+  </resultMap>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+    delete from t_comment
+    where id = #{id,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert" parameterType="pojo.Comment">
+    insert into t_comment (article_id,nickname,time,content)
+    values (#{articleId,jdbcType=INTEGER}, #{nickname,jdbcType=VARCHAR}, now(), #{content,jdbcType=LONGVARCHAR})
+  </insert>
+  <update id="updateByPrimaryKey" parameterType="pojo.Comment">
+    update t_comment
+    set article_id = #{articleId,jdbcType=INTEGER},
+      nickname = #{nickname,jdbcType=VARCHAR},
+      time = #{time,jdbcType=TIMESTAMP},
+      star = #{star,jdbcType=INTEGER},
+      diss = #{diss,jdbcType=INTEGER},
+      content = #{content,jdbcType=LONGVARCHAR}
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+  <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+    select id, article_id, nickname, time, star, diss, content
+    from t_comment
+    where id = #{id,jdbcType=INTEGER}
+  </select>
+  <select id="selectAll" resultMap="BaseResultMap">
+    select id, article_id, nickname, time, star, diss, content
+    from t_comment
+  </select>
+  <select id="selectByAricleId" resultMap="BaseResultMap">
+    select id, article_id, nickname, time, star, diss, content
+	from t_comment
+	where article_id = #{articleId}
+	ORDER BY time DESC
+	LIMIT #{page},#{count}
+  </select>
+  <select id="selectCount" parameterType="java.lang.Integer" resultType="java.lang.Integer">
+    select count(*) from t_comment where article_id = #{articleId}
+  </select>
+  <update id="addLove" parameterType="java.lang.Integer">
+    UPDATE  t_comment
+	SET star=star+1
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+  <update id="addDiss" parameterType="java.lang.Integer">
+    UPDATE  t_comment
+	SET diss=diss+1
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+</mapper>

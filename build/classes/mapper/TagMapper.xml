@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="dao.TagMapper">
+  <resultMap id="BaseResultMap" type="pojo.Tag">
+    <result column="id" jdbcType="INTEGER" property="id" />
+    <result column="tag" jdbcType="VARCHAR" property="tag" />
+  </resultMap>
+  <insert id="insert" parameterType="pojo.Tag">
+    insert into t_tag (id, tag)
+    values (#{id,jdbcType=INTEGER}, #{tag,jdbcType=VARCHAR})
+  </insert>
+  <select id="selectAll" resultMap="BaseResultMap">
+    select id, tag
+    from t_tag
+    GROUP BY tag
+  </select>
+  <select id="selectTagById" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+    select id, tag
+    from t_tag
+    where id = #{id,jdbcType=INTEGER}
+  </select>
+  <update id="updateByTag">
+    update t_tag
+	set tag=#{newName}
+	where tag=#{old}
+  </update>
+  <delete id="delTagByName" parameterType="java.lang.String">
+    delete from t_tag
+    where tag = #{name}
+  </delete>
+</mapper>
